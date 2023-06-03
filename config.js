@@ -9,6 +9,8 @@ const {
 const DB = 'mongodb://127.0.0.1:27017/moviesdb';
 
 const ALLOWED_CORS = [
+  'https://filmopoisk.nomoredomains.rocks',
+  'http://filmopoisk.nomoredomains.rocks',
   'http://localhost:3000',
 ];
 
