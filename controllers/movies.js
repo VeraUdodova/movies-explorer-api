@@ -1,4 +1,4 @@
-const Card = require('../models/movie');
+const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const AccessDeniedError = require('../errors/acces-denied');
 const {
@@ -6,45 +6,46 @@ const {
   HTTP_201,
 } = require('../utils/utils');
 
-module.exports.getMovies = (req, res, next) => {
-  Card.find({})
-    .populate(['owner', 'likes'])
-    .then((cards) => setResponse({
+module.exports.getMyMovies = (req, res, next) => {
+  Movie.find({ owner: req.user._id })
+    .populate(['owner'])
+    .then((movies) => setResponse({
       res,
       messageKey: 'data',
-      message: cards,
+      message: movies,
     }))
     .catch(next);
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const { name, link } = req.body;
+  const params = req.body;
+  params.owner = req.user._id;
 
-  Card.create({ name, link, owner: req.user._id })
-    .then((_card) => {
-      Card.findById(_card._id)
+  Movie.create(params)
+    .then((_movie) => {
+      Movie.findById(_movie._id)
         .populate(['owner'])
-        .then((card) => setResponse({
-          res, messageKey: null, message: card, httpStatus: HTTP_201,
+        .then((movie) => setResponse({
+          res, messageKey: null, message: movie, httpStatus: HTTP_201,
         }));
     })
     .catch(next);
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  const { cardId } = req.params;
+  const { movieId } = req.params;
 
-  Card.findById(cardId)
-    .then((card) => {
-      if (!card) {
+  Movie.findById(movieId)
+    .then((movie) => {
+      if (!movie) {
         throw new NotFoundError('Фильм не найден');
       }
 
-      if (card.owner.toString() !== req.user._id) {
+      if (movie.owner.toString() !== req.user._id) {
         throw new AccessDeniedError('Вы не можете удалить чужой фильм');
       }
 
-      card.deleteOne()
+      movie.deleteOne()
         .then(() => {
           setResponse({ res, message: 'Фильм удален' });
         })
