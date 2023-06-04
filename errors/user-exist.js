@@ -1,7 +1,8 @@
 const { HTTP_409 } = require('../utils/utils');
+const { ERROR_409 } = require('../messages');
 
 class UserExistError extends Error {
-  constructor(message = 'Такой пользователь уже есть') {
+  constructor(message = ERROR_409) {
     super(message);
     this.statusCode = HTTP_409;
   }

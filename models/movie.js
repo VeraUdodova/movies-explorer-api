@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { urlRegExp } = require('../utils/utils');
+const { VALIDATION_URL } = require('../messages');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegExp.test(v);
       },
-      message: 'Неправильный формат ссылки',
+      message: VALIDATION_URL,
     },
   },
   trailerLink: {
@@ -39,7 +40,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegExp.test(v);
       },
-      message: 'Неправильный формат ссылки',
+      message: VALIDATION_URL,
     },
   },
   thumbnail: {
@@ -49,7 +50,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegExp.test(v);
       },
-      message: 'Неправильный формат ссылки',
+      message: VALIDATION_URL,
     },
   },
   owner: {

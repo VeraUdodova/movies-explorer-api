@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ERROR_400, ERROR_500 } = require('../messages');
 
 const HTTP_200 = 200;
 const HTTP_201 = 201;
@@ -31,24 +32,20 @@ const setResponse = (
 };
 
 const errorHandler = (err, req, res, next) => {
-  console.log(req);
-  console.log(res);
-  console.log(err);
-
   let { statusCode = HTTP_500, message } = err;
 
   if (err instanceof mongoose.Error.ValidationError) {
     statusCode = HTTP_400;
   } else if (err instanceof mongoose.Error.CastError) {
     statusCode = HTTP_400;
-    message = 'Запрос некорректен';
+    message = ERROR_400;
   }
 
   res
     .status(statusCode)
     .send({
       message: statusCode === HTTP_500
-        ? 'На сервере произошла ошибка'
+        ? ERROR_500
         : message,
     });
 

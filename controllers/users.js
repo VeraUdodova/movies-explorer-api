@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const UserExistError = require('../errors/user-exist');
 const { JWT_SECRET } = require('../config');
+const { USER_NOT_FOUND, USER_EXIST } = require('../messages');
 
 const {
   setResponse,
@@ -14,7 +15,7 @@ const findUserById = (req, res, next, userId) => {
   User.findById(userId)
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       }
 
       setResponse({ res, messageKey: 'data', message: user });
@@ -32,14 +33,14 @@ const profileUpdateResponse = (res, req, next, profile) => {
   )
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       }
 
       setResponse({ res, messageKey: 'user', message: user });
     })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new UserExistError('Пользователь с таким email уже существует'));
+        next(new UserExistError(USER_EXIST));
       }
 
       next(err);

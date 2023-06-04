@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const AccessDeniedError = require('../errors/acces-denied');
+const { FILM_NOT_FOUND, FILM_DELETED, CANT_REMOVE_OTHER_USER_FILM } = require('../messages');
 const {
   setResponse,
   HTTP_201,
@@ -38,16 +39,16 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Фильм не найден');
+        throw new NotFoundError(FILM_NOT_FOUND);
       }
 
       if (movie.owner.toString() !== req.user._id) {
-        throw new AccessDeniedError('Вы не можете удалить чужой фильм');
+        throw new AccessDeniedError(CANT_REMOVE_OTHER_USER_FILM);
       }
 
       movie.deleteOne()
         .then(() => {
-          setResponse({ res, message: 'Фильм удален' });
+          setResponse({ res, message: FILM_DELETED });
         })
         .catch(next);
     })
