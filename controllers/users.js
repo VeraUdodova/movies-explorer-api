@@ -37,7 +37,13 @@ const profileUpdateResponse = (res, req, next, profile) => {
 
       setResponse({ res, messageKey: 'user', message: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new UserExistError('Пользователь с таким email уже существует'));
+      }
+
+      next(err);
+    });
 };
 
 const getMe = (req, res, next) => {

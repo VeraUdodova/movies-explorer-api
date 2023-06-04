@@ -31,6 +31,10 @@ const setResponse = (
 };
 
 const errorHandler = (err, req, res, next) => {
+  console.log(req);
+  console.log(res);
+  console.log(err);
+
   let { statusCode = HTTP_500, message } = err;
 
   if (err instanceof mongoose.Error.ValidationError) {

@@ -16,11 +16,11 @@ const app = express();
 mongoose.connect(DB);
 
 app.use(helmet());
+app.use(requestLogger);
 app.use(limiter);
 app.use(cors);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(requestLogger);
 app.use('/signin', signinValidator, login);
 app.use('/signup', signupValidator, registration);
 app.use('/users', auth, require('./routes/users'));
