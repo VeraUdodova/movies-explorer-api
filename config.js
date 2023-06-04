@@ -5,8 +5,8 @@ require('dotenv').config();
 const {
   JWT_SECRET = 'U15]ECPZ::F|q/yFAt6wHGFchB$ud@^hC##gl{ocRGvh*!5F/yFAt6wHGFchB$ud@e.aS52@gTros#SJ',
   PORT = 3000,
+  DB = 'mongodb://127.0.0.1:27017/bitfilmsdb',
 } = process.env;
-const DB = 'mongodb://127.0.0.1:27017/bitfilmsdb';
 
 const ALLOWED_CORS = [
   'https://filmopoisk.nomoredomains.rocks',
